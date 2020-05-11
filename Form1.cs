@@ -116,11 +116,8 @@ namespace AppExcel
             {
                 txtName.Text = comboBox1.SelectedItem.ToString();
                 dados = comboBox1.SelectedItem.ToString();
-            }
+            }        
             
-
-
-
             double valor = Valor();
 
             //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
@@ -168,9 +165,7 @@ namespace AppExcel
             if (comboBoxValor.SelectedItem.ToString() != null)
             {
                 buscaCombobox();
-            }
-
-           
+            }           
         }
 
         double Valor()
@@ -263,29 +258,23 @@ namespace AppExcel
 
         private void btnTodosEnUm_Click(object sender, EventArgs e)
         {
-
-       
               var grupoby = from x in list
                             group x by x.Pais into g
                             select new { Pais = g.Key
-                                                         , Destination = g.Min(m => m.Destination)
-                                                         , Prefix = g.Min(m => m.Prefix)
-                                                         , Rate_EUR = g.Min(m => m.Rate_EUR)
-                                                         , Tuyo_Rate = g.Min(m => m.Tuyo_Rate)
-                                                         , Excel = g.Min(m => m.Excel)                                                   
-                                                         , Tarifa = g.Select(m => m.Tarifa)
-                                                          
+                                         , Destination = g.Min(m => m.Destination)
+                                         , Prefix = g.Min(m => m.Prefix)
+                                         , Rate_EUR = g.Min(m => m.Rate_EUR)
+                                         , Tuyo_Rate = g.Min(m => m.Tuyo_Rate)
+                                         , Excel = g.Min(m => m.Excel)                                                   
+                                         , Tarifa = g.Select(m => m.Tarifa)
                             };
 
             var dados = grupoby.ToList();
-
             lblTotal.Text = "Total = " + dados.ToList().Count.ToString();
-
             dataGridView1.DataSource = grupoby.OrderBy(x => x.Pais).ToList();
-
-         
-
+            
         }
+        
 
         private void actualizarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -342,15 +331,12 @@ namespace AppExcel
             {
             
                 if (radioButtonDestination.Checked == true)
-                {                   
-
-                    //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
+                { 
                     var query = from x in list_dados
                                 orderby x.Destination ascending
                                 select x;
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
-
                 }
 
                 if (radioButtonPrefix.Checked == true)
@@ -371,7 +357,6 @@ namespace AppExcel
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
                 }
-
             }
             else
             {
@@ -426,14 +411,11 @@ namespace AppExcel
 
                 if (radioButtonDestination.Checked == true)
                 {
-
-                    //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
                     var query = from x in list_dados
                                 orderby x.Destination descending
                                 select x;
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
-
                 }
 
                 if (radioButtonPrefix.Checked == true)
@@ -443,7 +425,6 @@ namespace AppExcel
                                 select x;
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
-
                 }
 
                 if (radioButtonValor.Checked == true)
@@ -459,7 +440,6 @@ namespace AppExcel
             else
             {
                 txtName.Text = comboBox1.SelectedItem.ToString();
-
                 if (radioButtonValor.Checked == true)
                 {
                     //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
@@ -467,14 +447,12 @@ namespace AppExcel
                                 where x.Pais.Contains(comboBox1.SelectedItem.ToString()) && x.Rate_EUR <= valor
                                 orderby x.Destination descending
                                 select x;
-
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
                 }
 
                 if (radioButtonValor.Checked == true)
                 {
-                    //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
                     var query = from x in list_dados
                                 where x.Pais.Contains(comboBox1.SelectedItem.ToString()) && x.Rate_EUR <= valor
                                 orderby x.Prefix descending
@@ -486,7 +464,6 @@ namespace AppExcel
 
                 if (radioButtonValor.Checked == true)
                 {
-                    //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
                     var query = from x in list_dados
                                 where x.Pais.Contains(comboBox1.SelectedItem.ToString()) && x.Rate_EUR <= valor
                                 orderby x.Rate_EUR descending
@@ -501,9 +478,7 @@ namespace AppExcel
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
-        {            
-
-
+        {
             if (radioButtonDestination.Checked == true)
             {
                 var query = from x in list
@@ -519,7 +494,6 @@ namespace AppExcel
                 var query = from x in list
                             where x.Prefix.Contains(textBox4.Text)
                             select x;
-
                 dataGridView1.DataSource = query.ToList();
             }
 
@@ -578,9 +552,7 @@ namespace AppExcel
                     {
                         columnNames += dataGridView1.Columns[i].Name.ToString() + ";";
                         dados.Add(i);
-
                     }
-
 
                 }
                 output[0] += columnNames;
@@ -598,9 +570,7 @@ namespace AppExcel
                                 output[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + ";";
                                 break;
                             }
-
                         }
-
                     }
                 }
                 System.IO.File.WriteAllLines(sfd.FileName, output, System.Text.Encoding.UTF8);
