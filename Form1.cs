@@ -31,10 +31,8 @@ namespace AppExcel
         static IMongoDatabase db = client.GetDatabase("Excel_Datos");
         static IMongoCollection<dadoExcel> collection = db.GetCollection<dadoExcel>("excel");
 
-
-
         public string TextBoxText { get { return txtPorcentual.Text; } }
-
+        
         public void ReadAllDocuments() {
 
             var dadoPorcentual = from x in collection.AsQueryable<dadoExcel>() select x;
@@ -132,11 +130,9 @@ namespace AppExcel
             lblTotal.Text = "Total = " + query.ToList().Count.ToString();
         }
         
-        private void button1_Click(object sender, EventArgs e) {
-            
-            double valor = Valor();
-        
-            //var result =   collection.Find(x => x.Pais == txtName.Text && x.Rate_EUR <= valor).ToList();
+        private void button1_Click(object sender, EventArgs e) 
+        {        
+           double valor = Valor();
            var query = from x in list
                        where x.Pais.Contains(txtName.Text) && x.Rate_EUR <= valor
                        orderby x.Rate_EUR
@@ -252,8 +248,7 @@ namespace AppExcel
             {
                 ReadAllDocuments();
                 MessageBox.Show("Datos actualizado", "Hecho", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-          
+            }          
         }
 
         private void btnTodosEnUm_Click(object sender, EventArgs e)
@@ -271,8 +266,7 @@ namespace AppExcel
 
             var dados = grupoby.ToList();
             lblTotal.Text = "Total = " + dados.ToList().Count.ToString();
-            dataGridView1.DataSource = grupoby.OrderBy(x => x.Pais).ToList();
-            
+            dataGridView1.DataSource = grupoby.OrderBy(x => x.Pais).ToList();            
         }
         
 
@@ -324,7 +318,6 @@ namespace AppExcel
 
         private void btnOrdenar_Click(object sender, EventArgs e)
         {
-
             double valor = Valor();
 
             if (comboBox1.SelectedIndex == -1)
@@ -346,7 +339,6 @@ namespace AppExcel
                                 select x;
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
-
                 }
 
                 if (radioButtonValor.Checked == true)
@@ -397,8 +389,7 @@ namespace AppExcel
                     dataGridView1.DataSource = query.ToList();
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
                 }
-            }
-   
+            }   
         }
 
         private void btnDesc_Click(object sender, EventArgs e)
@@ -473,8 +464,6 @@ namespace AppExcel
                     lblTotal.Text = "Total = " + query.ToList().Count.ToString();
                 }
             }
-           
-
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
@@ -496,7 +485,6 @@ namespace AppExcel
                             select x;
                 dataGridView1.DataSource = query.ToList();
             }
-
         }
 
         private void radioButtonDestination_CheckedChanged(object sender, EventArgs e)
@@ -523,7 +511,6 @@ namespace AppExcel
 
         private void btnName_Click(object sender, EventArgs e)
         {
-
             string filename = "";
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "CSV (*.csv)|*.csv";
@@ -553,8 +540,8 @@ namespace AppExcel
                         columnNames += dataGridView1.Columns[i].Name.ToString() + ";";
                         dados.Add(i);
                     }
-
                 }
+                
                 output[0] += columnNames;
                 int colunas = 0;
                 for (int i = 1; (i - 1) < dataGridView1.RowCount; i++)
