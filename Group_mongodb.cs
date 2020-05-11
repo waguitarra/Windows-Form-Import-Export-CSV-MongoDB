@@ -18,7 +18,6 @@ namespace AppExcel
 {
     public class Group_mongodb
     {
-
         public void excelExport()
         {
             var fileContent = string.Empty;
@@ -34,9 +33,7 @@ namespace AppExcel
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
-
                 DateTime data = Convert.ToDateTime(DateTime.Today);
-
 
                 string namoExcel = openFileDialog.SafeFileName;
 
@@ -77,15 +74,9 @@ namespace AppExcel
                             );
                         }
                         collection.InsertMany(EmpInfoArray);
-
                     }
                 }
-            }
-        
-
+            }    
         }
-
-
-
     }
 }
