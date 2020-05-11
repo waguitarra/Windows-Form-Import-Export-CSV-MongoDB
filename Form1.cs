@@ -154,13 +154,10 @@ namespace AppExcel
 
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try {
-                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-
-            } catch { };
+        {            
+            textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+            textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();         
        
         }
 
@@ -297,60 +294,43 @@ namespace AppExcel
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
-        {
+        {         
+            DialogResult dr = MessageBox.Show("¿Quieres Borrar Excel " + comboBoxDeleteExcel.SelectedItem.ToString() + " ?.", "Atencion!!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            try
+            if (dr == DialogResult.Yes)
             {
-
-                DialogResult dr = MessageBox.Show("¿Quieres Borrar Excel " + comboBoxDeleteExcel.SelectedItem.ToString() + " ?.", "Atencion!!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (dr == DialogResult.Yes)
+                if (comboBoxDeleteExcel.SelectedIndex != -1)
                 {
-                    if (comboBoxDeleteExcel.SelectedIndex != -1)
-                    {
-                        var EmpInfoArray =
-                             new BsonDocument {
-                        { "Excel", comboBoxDeleteExcel.SelectedItem.ToString() } };
+                    var EmpInfoArray =
+                         new BsonDocument {
+                    { "Excel", comboBoxDeleteExcel.SelectedItem.ToString() } };
 
-                        collection.DeleteMany(EmpInfoArray);
+                    collection.DeleteMany(EmpInfoArray);
 
-                        MessageBox.Show("Datos borrados " + comboBoxDeleteExcel.SelectedItem.ToString());
-                        ReadAllDocuments();
-                    }
+                    MessageBox.Show("Datos borrados " + comboBoxDeleteExcel.SelectedItem.ToString());
+                    ReadAllDocuments();
                 }
             }
-            catch (Exception){}
-
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                lblId_.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
-                textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-            }
-            catch (Exception) {}
+        {           
+            lblId_.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+            textBox1.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+            textBox2.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+            textBox3.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();       
   
         }
 
         private void btnDeleteItem_Click(object sender, EventArgs e)
         {
-            try
-            {
+            DialogResult dr = MessageBox.Show("¿Quieres registro: " + lblId_.Text + " ?.", "Atencion!!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                DialogResult dr = MessageBox.Show("¿Quieres registro: " + lblId_.Text + " ?.", "Atencion!!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (dr == DialogResult.Yes) {
-                    collection.DeleteOne(s => s._id == ObjectId.Parse(lblId_.Text));
-                    MessageBox.Show("Datos Borrado");
-                    ReadAllDocuments();
-                }
+            if (dr == DialogResult.Yes) {
+                collection.DeleteOne(s => s._id == ObjectId.Parse(lblId_.Text));
+                MessageBox.Show("Datos Borrado");
+                ReadAllDocuments();
             }
-            catch (Exception) {}
-            
         }
 
         private void btnOrdenar_Click(object sender, EventArgs e)
@@ -569,69 +549,62 @@ namespace AppExcel
 
         private void btnName_Click(object sender, EventArgs e)
         {
-            try
+
+            string filename = "";
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "CSV (*.csv)|*.csv";
+            sfd.FileName = "Tuyo_Prefix.csv";
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                string filename = "";
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "CSV (*.csv)|*.csv";
-                sfd.FileName = "Tuyo_Prefix.csv";
-                if (sfd.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("Los datos se exportarán y se le notificará cuando esté listo.");
+                if (File.Exists(filename))
                 {
-                    MessageBox.Show("Los datos se exportarán y se le notificará cuando esté listo.");
-                    if (File.Exists(filename))
+                    try
                     {
-                        try
-                        {
-                            File.Delete(filename);
-                        }
-                        catch (IOException ex)
-                        {
-                            MessageBox.Show("No fue posible escribir los datos en el disco." + ex.Message);
-                        }
+                        File.Delete(filename);
                     }
-                    int columnCount = dataGridView1.ColumnCount;
-                    List<int> dados = new List<int>();
-                    string columnNames = "";
-                    string[] output = new string[dataGridView1.RowCount + 1];
-                    for (int i = 0; i < columnCount; i++)
+                    catch (IOException ex)
                     {
-                        if (dataGridView1.Columns[i].Name.ToString() == "Destination" || dataGridView1.Columns[i].Name.ToString() == "Prefix" || dataGridView1.Columns[i].Name.ToString() == "Tuyo_Rate" || dataGridView1.Columns[i].Name.ToString() == "Data")
-                        {
-                            columnNames += dataGridView1.Columns[i].Name.ToString() + ";";
-                            dados.Add(i);
-
-                        }
-
+                        MessageBox.Show("No fue posible escribir los datos en el disco." + ex.Message);
+                    }
+                }
+                int columnCount = dataGridView1.ColumnCount;
+                List<int> dados = new List<int>();
+                string columnNames = "";
+                string[] output = new string[dataGridView1.RowCount + 1];
+                for (int i = 0; i < columnCount; i++)
+                {
+                    if (dataGridView1.Columns[i].Name.ToString() == "Destination" || dataGridView1.Columns[i].Name.ToString() == "Prefix" || dataGridView1.Columns[i].Name.ToString() == "Tuyo_Rate" || dataGridView1.Columns[i].Name.ToString() == "Data")
+                    {
+                        columnNames += dataGridView1.Columns[i].Name.ToString() + ";";
+                        dados.Add(i);
 
                     }
-                    output[0] += columnNames;
-                    int colunas = 0;
-                    for (int i = 1; (i - 1) < dataGridView1.RowCount; i++)
+
+
+                }
+                output[0] += columnNames;
+                int colunas = 0;
+                for (int i = 1; (i - 1) < dataGridView1.RowCount; i++)
+                {
+                    for (int j = 0; j < columnCount; j++)
                     {
-                        for (int j = 0; j < columnCount; j++)
+                        for (int ii = 0; ii < dados.Count; ii++)
                         {
-                            for (int ii = 0; ii < dados.Count; ii++)
+                            colunas = dados[ii];
+
+                            if (colunas == j)
                             {
-                                colunas = dados[ii];
-
-                                if (colunas == j)
-                                {
-                                    output[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + ";";
-                                    break;
-                                }
-
+                                output[i] += dataGridView1.Rows[i - 1].Cells[j].Value.ToString() + ";";
+                                break;
                             }
 
                         }
-                    }
-                    System.IO.File.WriteAllLines(sfd.FileName, output, System.Text.Encoding.UTF8);
-                    MessageBox.Show("Su archivo fue generado y está listo para usar.");
-                }
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + " El Excel está abierto?");
+                    }
+                }
+                System.IO.File.WriteAllLines(sfd.FileName, output, System.Text.Encoding.UTF8);
+                MessageBox.Show("Su archivo fue generado y está listo para usar.");
             }
         }
     }
