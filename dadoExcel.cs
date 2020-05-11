@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MongoDB.Bson.Serialization.Attributes;
 using System.Configuration;
-using Microsoft.Azure.Documents;
-using Newtonsoft.Json.Linq;
 using System.IO;
-using Newtonsoft.Json;
+
 
 namespace AppExcel
-
 {
     class dadoExcel
     {  
@@ -32,15 +25,14 @@ namespace AppExcel
 
         [BsonElement("Tuyo_Rate")]
         public double Tuyo_Rate
-        {
-          
-            get => Rate_EUR + (Rate_EUR * Tarifa / 100);
+        {          
+           get => Rate_EUR + (Rate_EUR * Tarifa / 100);
         }
 
         [BsonElement("Beneficio")]
         public double Beneficio
         {
-            get => Tuyo_Rate - Rate_EUR;
+           get => Tuyo_Rate - Rate_EUR;
         }
 
         [BsonElement("Data")]
@@ -54,10 +46,6 @@ namespace AppExcel
 
         [BsonElement("Tarifa")]
         public int Tarifa { get; set; }
-
     }
-
-
-
 }
 
